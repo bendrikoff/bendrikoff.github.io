@@ -22,6 +22,8 @@ The six environments include canyons, a lunar quarry, ice crystals, ruins, volca
 
 The sound toggle starts `Warm Cosmic Arpeggios.mp3` in the planet menu and crossfades to `Coin Collectors Guide.mp3` during missions. `coin-recived.mp3` plays when a coin is collected. Damage uses a short synthesized low impact and filtered-noise burst. Music pauses when the tab is hidden.
 
+The launch menu stays hidden behind a dedicated loading screen until both 3D models are ready and all three audio files have been downloaded into memory. The loader reports separate world-building and radio-loading stages, then reveals the interactive planet map only when launch is safe.
+
 ## Validate and package
 
 `npm test` checks stationary waiting, individual diagonal moves, both wrap directions, input locking, pause/resume, landing collisions, retries, defeat, ratings and seeded generation. It checks 240 puzzles for safe continuation, sparse coin placement and a route collecting every coin.

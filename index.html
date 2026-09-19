@@ -17,7 +17,7 @@
       <button class="brand" id="home" aria-label="Return to mission selection"><span class="brand-mark">D<span>↗</span></span><span>DOGELON<span class="brand-sub">MARS ARCADE</span></span></button>
       <div class="top-actions"><span class="jam">VIBECON <b>2026</b></span><button id="motion" class="icon-button" aria-label="Reduce camera motion" aria-pressed="false" title="Camera motion">≈</button><button id="sound" class="icon-button" aria-label="Enable sound" title="Sound">♪<span class="sound-slash">/</span></button><button id="pause" class="icon-button hidden" aria-label="Pause game" title="Pause (P)">Ⅱ</button><button id="help" class="icon-button" aria-label="How to play">?</button></div>
     </header>
-    <section id="menu" class="menu">
+    <section id="menu" class="menu hidden">
       <div class="intro"><div class="eyebrow">DOGELON MARS</div><h1>MARS <span>HOPPER</span></h1><p>CHOOSE A PLANET. MAKE THE LEAP.</p></div>
       <div class="mission-panel"><div id="map-interaction" class="orbital-map" aria-label="3D solar system. Select a planet. Drag to rotate, scroll or pinch to zoom."><div id="missions" class="missions"></div></div><div class="mission-bottom"><button class="launch" id="launch">LAUNCH <span>↗</span></button></div></div>
       <div class="menu-footer"><span>6 WORLDS · A PUZZLE IN EVERY LEAP</span><button id="controls-link">HOW TO PLAY <span>↗</span></button></div>
@@ -29,7 +29,7 @@
     <div id="touch-controls" class="touch-controls hidden"><button id="left" aria-label="Jump forward left">↖ LEFT</button><button id="right" aria-label="Jump forward right">RIGHT ↗</button></div>
     <div id="game-tip" class="game-tip hidden">CHOOSE YOUR NEXT TILE · EDGES WRAP AROUND</div>
     <section id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="overlay-title"><div class="dialog"><span id="overlay-eyebrow" class="eyebrow">MISSION CONTROL</span><h2 id="overlay-title">How to hop</h2><div id="overlay-content"></div><button id="overlay-primary" class="launch">GOT IT <span>↗</span></button><button id="overlay-secondary" class="secondary hidden">BACK TO MISSIONS</button></div></section>
-    <div id="loading" class="loading">CONNECTING TO MARS<span>Loading Dogelon…</span></div>
+    <div id="loading" class="loading" role="status" aria-live="polite"><div class="loading-core"><div class="loading-emblem" aria-hidden="true"><i></i><b>D</b></div><p>DOGELON MARS ARCADE</p><strong id="loading-title">PREPARING FOR LAUNCH</strong><div class="loading-track"><i id="loading-progress"></i></div><div class="loading-meta"><small id="loading-status">BUILDING 3D WORLDS</small><small id="loading-percent">8%</small></div></div></div>
   </main>
   <script src="core.js"></script><script src="renderer3d.bundle.js"></script><script src="game.js"></script>
 </body>
