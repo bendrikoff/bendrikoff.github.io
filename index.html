@@ -1,122 +1,36 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | b3 balls</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=640 height=960 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">b3 balls</div>
-      </div>
-    </div>
-    <script>
-
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var warningBanner = document.querySelector("#unity-warning");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Builds.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/Builds.data",
-        frameworkUrl: buildUrl + "/Builds.framework.js",
-        codeUrl: buildUrl + "/Builds.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "b3 balls",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-      };
-
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        container.className = "unity-mobile";
-        canvas.className = "unity-mobile";
-
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
-
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-
-        canvas.style.width = "640px";
-        canvas.style.height = "960px";
-      }
-
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                loadingBar.style.display = "none";
-                fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
-      document.body.appendChild(script);
-
-    </script>
-  </body>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#11121a">
+  <meta name="description" content="One Dogelon. Three lanes. A whole planet to explore. Jump, dodge and collect Dogelon coins in this turn-based Mars jumping puzzle.">
+  <title>Dogelon · Mars Hopper</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%23ff754c'/%3E%3Ccircle cx='24' cy='22' r='8' fill='%23aa3b36'/%3E%3Ccircle cx='40' cy='42' r='11' fill='%23c44836'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="arcade.css">
+  <link rel="stylesheet" href="immersive.css">
+</head>
+<body>
+  <main id="app">
+    <canvas id="scene" aria-label="Mars puzzle: Left or Right jumps diagonally forward. Crossing an edge wraps to the opposite side."></canvas>
+    <header class="topbar">
+      <button class="brand" id="home" aria-label="Return to mission selection"><span class="brand-mark">D<span>↗</span></span><span>DOGELON<span class="brand-sub">MARS ARCADE</span></span></button>
+      <div class="top-actions"><span class="jam">VIBECON <b>2026</b></span><button id="motion" class="icon-button" aria-label="Reduce camera motion" aria-pressed="false" title="Camera motion">≈</button><button id="sound" class="icon-button" aria-label="Enable sound" title="Sound">♪<span class="sound-slash">/</span></button><button id="pause" class="icon-button hidden" aria-label="Pause game" title="Pause (P)">Ⅱ</button><button id="help" class="icon-button" aria-label="How to play">?</button></div>
+    </header>
+    <section id="menu" class="menu">
+      <div class="intro"><div class="eyebrow">DOGELON MARS</div><h1>MARS <span>HOPPER</span></h1><p>CHOOSE A PLANET. MAKE THE LEAP.</p></div>
+      <div class="mission-panel"><div id="map-interaction" class="orbital-map" aria-label="3D solar system. Select a planet. Drag to rotate, scroll or pinch to zoom."><div id="missions" class="missions"></div></div><div class="mission-bottom"><button class="launch" id="launch">LAUNCH <span>↗</span></button></div></div>
+      <div class="menu-footer"><span>6 WORLDS · A PUZZLE IN EVERY LEAP</span><button id="controls-link">HOW TO PLAY <span>↗</span></button></div>
+    </section>
+    <section id="hud" class="hud hidden" aria-label="Game status"><div class="hud-left"><span id="hud-sector">01 — ELYSIUM</span><div class="progress-track"><div id="progress"></div><span class="finish-flag">⚑</span></div><strong id="distance">0<span>m</span></strong></div><div class="hud-right"><div class="race-timer"><span id="timer">0.0</span><small>moves</small></div><div class="gem-score coin-score">● <span id="coins">0</span></div><div id="lives" aria-label="3 shields remaining">◆ ◆ ◆</div></div></section>
+    <div id="toast" role="status" class="toast hidden"></div>
+    <div id="screen-fx" aria-hidden="true"></div><div id="combo" role="status" class="hidden"></div>
+    <div id="ready" class="ready hidden"><span>ELYSIUM · MISSION 01</span><h2>LET’S MAKE<br>PAWPRINTS.</h2><p>↖ Left or right ↗ · One leap per move</p><button id="begin" class="launch">GO, DOGELON! <span>↗</span></button></div>
+    <div id="touch-controls" class="touch-controls hidden"><button id="left" aria-label="Jump forward left">↖ LEFT</button><button id="right" aria-label="Jump forward right">RIGHT ↗</button></div>
+    <div id="game-tip" class="game-tip hidden">CHOOSE YOUR NEXT TILE · EDGES WRAP AROUND</div>
+    <section id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="overlay-title"><div class="dialog"><span id="overlay-eyebrow" class="eyebrow">MISSION CONTROL</span><h2 id="overlay-title">How to hop</h2><div id="overlay-content"></div><button id="overlay-primary" class="launch">GOT IT <span>↗</span></button><button id="overlay-secondary" class="secondary hidden">BACK TO MISSIONS</button></div></section>
+    <div id="loading" class="loading">CONNECTING TO MARS<span>Loading Dogelon…</span></div>
+  </main>
+  <script src="core.js"></script><script src="renderer3d.bundle.js"></script><script src="game.js"></script>
+</body>
 </html>
